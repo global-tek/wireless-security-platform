@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sensor-agent
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: sensor-agent
+
+  template:
+    metadata:
+      labels:
+        app: sensor-agent
+
+    spec:
+      containers:
+      - name: sensor-agent
+        image: wireless/sensor-agent:latest

@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+
+    - name: Install dependencies
+      run: |
+        pip install flake8
+
+    - name: Lint
+      run: |
+        flake8 .
+
+    - name: Build Docker Images
+      run: |
+        docker build services/sensor-agent -t sensor-agent

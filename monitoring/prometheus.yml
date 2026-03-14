@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+
+  - job_name: sensor_agents
+
+    static_configs:
+      - targets: ['sensor-agent:8000']
