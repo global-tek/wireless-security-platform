@@ -1,16 +1,17 @@
-version: "3"
-
 services:
 
   elasticsearch:
-    image: elasticsearch:8
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
     environment:
       - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.transport.ssl.enabled=false
     ports:
       - 9200:9200
 
   kibana:
-    image: kibana:8
+    image: docker.elastic.co/kibana/kibana:8.13.4
     ports:
       - 5601:5601
 
@@ -25,12 +26,26 @@ services:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - 9090:9090
+    depends_on:
+      - telemetry-api
 
   sensor-agent:
     build: ./services/sensor-agent
+    depends_on:
+      - telemetry-api
 
   detection-engine:
     build: ./services/detection-engine
+    ports:
+      - 8001:8001
 
   telemetry-api:
     build: ./services/telemetry-api
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - DETECTION_URL=http://detection-engine:8001/detect
+    depends_on:
+      - elasticsearch
+      - detection-engine
+    ports:
+      - 8000:8000

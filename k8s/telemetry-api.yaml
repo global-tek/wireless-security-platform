@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telemetry-api
+  namespace: wireless-security-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telemetry-api
+  template:
+    metadata:
+      labels:
+        app: telemetry-api
+    spec:
+      containers:
+      - name: telemetry-api
+        image: wireless-security-platform-telemetry-api:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+        env:
+        - name: ELASTICSEARCH_URL
+          value: http://elasticsearch:9200
+        - name: DETECTION_URL
+          value: http://detection-engine:8001/detect
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: telemetry-api
+  namespace: wireless-security-platform
+spec:
+  selector:
+    app: telemetry-api
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000

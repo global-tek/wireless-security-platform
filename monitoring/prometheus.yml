@@ -2,8 +2,7 @@ global:
   scrape_interval: 15s
 
 scrape_configs:
-
-  - job_name: sensor_agents
-
+  - job_name: telemetry_api
+    metrics_path: /metrics
     static_configs:
-      - targets: ['sensor-agent:8000']
+      - targets: ['telemetry-api:8000']

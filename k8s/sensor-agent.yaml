@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sensor-agent
+  namespace: wireless-security-platform
 
 spec:
   replicas: 1
@@ -18,4 +19,10 @@ spec:
     spec:
       containers:
       - name: sensor-agent
-        image: wireless/sensor-agent:latest
+        image: wireless-security-platform-sensor-agent:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: TELEMETRY_API
+          value: http://telemetry-api:8000/telemetry
+        - name: SCAN_INTERVAL_SECONDS
+          value: "60"

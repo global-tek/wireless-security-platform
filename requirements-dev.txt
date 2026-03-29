@@ -1,0 +1,7 @@
+flake8
+pytest
+fastapi
+requests
+prometheus-client
+elasticsearch==8.13.2
+httpx
