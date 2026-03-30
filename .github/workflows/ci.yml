@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
 
@@ -36,3 +37,19 @@ jobs:
         docker build services/sensor-agent -t sensor-agent
         docker build services/detection-engine -t detection-engine
         docker build services/telemetry-api -t telemetry-api
+
+  k8s-validate:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup kubectl
+      uses: azure/setup-kubectl@v4
+
+    - name: Kubernetes Client Dry Run
+      run: |
+        kubectl kustomize k8s | kubectl apply --dry-run=client --validate=false -f -

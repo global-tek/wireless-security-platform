@@ -41,7 +41,13 @@ Useful endpoints:
 Apply all manifests:
 
 ```bash
-kubectl apply -f k8s/
+kubectl apply -k k8s/
+```
+
+Client-side validation without a cluster connection:
+
+```bash
+kubectl kustomize k8s | kubectl apply --dry-run=client --validate=false -f -
 ```
 
 Resources included:
